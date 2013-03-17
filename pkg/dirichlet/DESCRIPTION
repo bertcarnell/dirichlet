@@ -7,4 +7,4 @@ Author: Rob Carnell <carnellr@battelle.org>
 Maintainer: Rob Carnell <carnellr@battelle.org>
 Depends: R (>= 2.14.2) 
 Description: Contains the distributions functions for the Dirichlet and Generalized Dirichlet distributions
-License: GPL (>= v2)
+License: GPL (>=2)
