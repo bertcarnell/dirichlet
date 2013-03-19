@@ -20,7 +20,7 @@ fit.genDirichlet(X, type)
   parameter in the distribution, the other based on a weighted mean of the \code{k} estimates for each parameter.
 }
 \author{Rob Carnell}
-\seealso{\code{\link{rdirichlet}, \code{\link{rGenDirichlet}}}}
+\seealso{\code{\link{rdirichlet}}, \code{\link{rGenDirichlet}}}
 \examples{
   Z <- rdirichlet(100, c(4,3,2))
   fit.dirichlet(Z)
@@ -30,5 +30,3 @@ fit.genDirichlet(X, type)
   fit.genDirichlet(Z2)
 }
 \keyword{distribution}
-
-

@@ -17,7 +17,11 @@ ddirichlet <- function(x, alpha) {
   ## alpha = vector of dirichlet parameters ( k * p )
 
   stopifnot( length(alpha) == length(x) )
-  if( abs(sum(x)-1) > 10*.Machine$double.eps ) return(0)
+  stopifnot( all(alpha > 0) )
+  # the density outside the support space for x is zero
+  if (any(x <= 0)) return(0)
+  if (any(x > 1)) return(0)
+  if ( abs(sum(x)-1) > 10*.Machine$double.eps ) return(0)
 
   s <- sum( ( alpha - 1 ) * log(x) )
   exp( s - ( sum( lgamma(alpha) ) - lgamma( sum(alpha) ) ) )
@@ -25,21 +29,34 @@ ddirichlet <- function(x, alpha) {
 
 ################################################################################
 
-rdirichlet <- function(n, alpha) {
+rdirichlet <- function(n, alpha, allowZero=FALSE) {
   ## pick n random deviates from the Dirichlet function with shape
-  ## parameters alpha
+  ## parameters alpha.  alpha = 0 is allowed and produces 0 for those options
 
-  lena <- length(alpha);
+  lena <- length(alpha)
   stopifnot( lena > 1 && n > 0 )
-  x <- matrix( rgamma(lena*n, alpha), ncol=lena, byrow=TRUE);
-  sm <- x %*% rep(1, lena);
-  x / as.vector(sm);
+  if (!allowZero)
+  {
+    stopifnot(all(alpha > 0))
+    x <- matrix( rgamma(lena*n, alpha), ncol=lena, byrow=TRUE)
+    sm <- x %*% rep(1, lena)
+    return(x / as.vector(sm))
+  } else
+  {
+    stopifnot(all(alpha >= 0))
+    ind <- which(alpha != 0)
+    X <- sapply(alpha[ind], function(x) rgamma(n, x, 1))
+    Xsum <- apply(X, 1, sum)
+    Y <- apply(X, 2, "/", Xsum)
+    Z <- matrix(0, nrow=n, ncol=length(alpha))
+    Z[,ind] <- Y
+    return(Z)
+  }
 }
 
 ################################################################################
 
-qdirichlet <- function(X, alpha)
-{
+qdirichlet <- function(X, alpha) {
   # qdirichlet is not an exact quantile function since the quantile of a
   #  multivariate distribtion is not unique
   # qdirichlet is also not the quantiles of the marginal distributions since
@@ -130,8 +147,7 @@ fit.dirichlet <- function(X, type="mm")
 
 ################################################################################
 
-qMarginalDirichlet <- function(p, alpha)
-{
+qMarginalDirichlet <- function(p, alpha) {
   # the marginals of the Dirichlet distribution are beta distributions
   #  with paramters alpha = k*p, beta = k(1-p)
   #  where the Dirichlet alpha = k*p
@@ -149,13 +165,10 @@ qMarginalDirichlet <- function(p, alpha)
 
 ################################################################################
 
-calculateDirichletCV <- function(p, k)
-{
+calculateDirichletCV <- function(p, k) {
   margCV <- sqrt(p*(1-p)/(k+1))/p
 
   return(margCV)
 }
 
 ################################################################################
-
-
