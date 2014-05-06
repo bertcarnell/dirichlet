@@ -76,14 +76,14 @@ test.fit_genDirichlet <- function()
 
   desired_p <- c(.4, .3, .2, .1)
   desired_k <- c(5, 6, 7, 10)
-  temp <- tempTest(desired_p, desired_k, N=1000)
-  checkEqualsNumeric(temp$k[1:3], desired_k[1:3], tolerance=0.1)
+  temp <- tempTest(desired_p, desired_k, N=10000)
+  checkEqualsNumeric(temp$k[1:3], desired_k[1:3], tolerance=0.05*max(desired_k))
   checkEqualsNumeric(temp$p, desired_p, tolerance=0.01)
 
   desired_p <- c(.5, .3, .2)
   desired_k <- c(50, 60, 70)
-  temp <- tempTest(desired_p, desired_k, N=1000)
-  checkEqualsNumeric(temp$k[1:2], desired_k[1:2], tolerance=0.1)
+  temp <- tempTest(desired_p, desired_k, N=10000)
+  checkEqualsNumeric(temp$k[1:2], desired_k[1:2], tolerance=0.05*max(desired_k))
   checkEqualsNumeric(temp$p, desired_p, tolerance=0.01)
 
   # this test failed before adding the sumx numerical accuracy code
@@ -101,14 +101,14 @@ test.fit_genDirichlet <- function()
 
   desired_p <- c(.4, .3, .2, .1)
   desired_k <- c(5, 6, 7, 10)
-  temp <- tempTest(desired_p, desired_k, "mm", N=1000)
-  checkEqualsNumeric(temp$k[1:3], desired_k[1:3], tolerance=0.1)
+  temp <- tempTest(desired_p, desired_k, "mm", N=10000)
+  checkEqualsNumeric(temp$k[1:3], desired_k[1:3], tolerance=0.05*max(desired_k))
   checkEqualsNumeric(temp$p, desired_p, tolerance=0.1)
 
   desired_p <- c(.5, .3, .2)
   desired_k <- c(50, 60, 70)
-  temp <- tempTest(desired_p, desired_k, "mm", N=1000)
-  checkEqualsNumeric(temp$k[1:2], desired_k[1:2], tolerance=0.1)
+  temp <- tempTest(desired_p, desired_k, "mm", N=10000)
+  checkEqualsNumeric(temp$k[1:2], desired_k[1:2], tolerance=0.05*max(desired_k))
   checkEqualsNumeric(temp$p, desired_p, tolerance=0.1)
 
   checkException(fit.dirichlet(4), silent=TRUE)
@@ -116,8 +116,8 @@ test.fit_genDirichlet <- function()
 
   desired_p <- c(.5, .3, .2)
   desired_k <- c(5, 6, 7)
-  temp <- tempTest(desired_p, desired_k, "ml", N=20)
-  checkEqualsNumeric(temp$k[1:2], desired_k[1:2], tolerance=0.1)
+  temp <- tempTest(desired_p, desired_k, "ml", N=100)
+  checkEqualsNumeric(temp$k[1:2], desired_k[1:2], tolerance=0.05*max(desired_k))
   checkEqualsNumeric(temp$p, desired_p, tolerance=0.05)
 }
 
