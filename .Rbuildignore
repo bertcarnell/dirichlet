@@ -1,2 +1,4 @@
+^codecov\.yml$
+^\.travis\.yml$
 ^dirichlet\.Rproj$
 ^\.Rproj\.user$
