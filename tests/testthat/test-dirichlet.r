@@ -18,14 +18,16 @@ describe("ddirichlet", {
                          .1^(4 - 1)*.2^(5 - 1)*.7^(8 - 1))
   })
   it("That values of a outside the Dirichlet parameters yield values of zero", {
-    expect_equal(ddirichlet(c(1,1,1), c(1,1,1)), 0)
-    expect_equal(ddirichlet(c(.1,.1,.1), c(1,1,1)), 0)
+    expect_equal(ddirichlet(c(1, 1, 1), c(1,1,1)), 0)
+    expect_equal(ddirichlet(c(.1, .1, .1), c(1,1,1)), 0)
+    expect_equal(ddirichlet(c(-1, .1, .1), c(4, 3, 2)), 0)
+    expect_equal(ddirichlet(c(.1, 2, .1), c(4, 3, 2)), 0)
   })
 })
 
 describe("rdirichlet", {
   set.seed(1976)
-  n <- 100000
+  n <- 10000
   p <- c(.4, .3, .2, .1)
   Y <- rdirichlet(n, p)
   expect_true(all(dim(Y) == c(n, length(p))))
@@ -33,18 +35,27 @@ describe("rdirichlet", {
   alpha <- c(4,8,2)
   Y2 <- rdirichlet(n, alpha)
   expect_true(all(dim(Y2) == c(n, length(alpha))))
+
+  Y3 <- rdirichlet(n, p, allowZero = TRUE)
+  expect_true(all(dim(Y3) == c(n, length(p))))
   it("The returned vector is on (0,1)",{
     expect_true(all(Y >= 0 && Y <= 1))
     expect_true(all(Y2 >= 0 && Y2 <= 1))
+    expect_true(all(Y3 >= 0 && Y3 <= 1))
   })
   it("The sum of the values in each draw is one.", {
     expect_equal(rowSums(Y), rep(1, n))
     expect_equal(rowSums(Y2), rep(1, n))
+    expect_equal(rowSums(Y3), rep(1, n))
   })
   it("The mean of all the draws for each parameter is equal to the desired mean probabilities", {
     expect_equal(apply(Y, 2, mean), p, tol = 0.05)
     expect_equal(apply(Y2, 2, mean), alpha/sum(alpha), tol = 0.05)
+    expect_equal(apply(Y3, 2, mean), p, tol = 0.05)
   })
+  expect_error(Y4 <- rdirichlet(100, c(0.8, 0, 0.2)))
+  Y4 <- rdirichlet(100, c(0.8, 0, 0.2), allowZero = TRUE)
+  expect_equal(Y4[,2], rep(0, 100))
 })
 
 describe("qdirichlet",{
@@ -128,5 +139,15 @@ test_that("fit.dirichlet", {
   expect_equal(temp$p, desired_p, tolerance = 0.05)
 
   expect_error(fit.dirichlet(4), silent = TRUE)
-  expect_error(fit.dirichlet(matrix(1,2,3,4, nrow = 2), "not there yet"), silent = TRUE)
+  expect_error(fit.dirichlet(matrix(c(1,2,3,4), nrow = 2), "not there yet"))
+})
+
+test_that("qMarginalDirichlet", {
+  expect_equal(rep(0.99, 3), qMarginalDirichlet(c(0.9999), c(2, 2, 2)), tolerance = 0.01)
+  expect_error(qMarginalDirichlet(c(1, 0.2, 0.1), c(4, 3, 2)))
+  expect_error(qMarginalDirichlet(c(0.7, 0.2, 0.1), c(4, -1, 2)))
+})
+
+test_that("calculateDirichletCV", {
+  expect_equal(rep(sqrt(2)/2, 3), calculateDirichletCV(c(1,1,1)), tolerance = 1E-6)
 })

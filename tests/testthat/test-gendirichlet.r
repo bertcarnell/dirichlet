@@ -1,8 +1,19 @@
 context("test-gendirichlet")
 
+test_that("dGenDirichlet", {
+  expect_equal(0, dGenDirichlet(c(0.1, 0.1, 0.1), c(0.7, 0.2, 0.1), c(2, 3, 4)))
+  expect_equal(0, dGenDirichlet(c(0.1, 0.1, 0.1), c(1.1, 0.2, 0.1), c(2, 3, 4)))
+  expect_equal(0, dGenDirichlet(c(0.1, 0.1, 0.1), c(0.7, 0.2, -0.1), c(2, 3, 4)))
+  expect_equal(0, dGenDirichlet(c(0.1, 0.1, 0.1), c(0.7, 0.2, 0.1), c(2, -3, 4)))
+})
+
+test_that("dGenDirichletStd", {
+  expect_equal(0, dGenDirichletStd(c(0.1, 0.1, 0.1), c(0.7, 0.2, 0.1), c(2, 3, 4)))
+})
+
 describe("rGenDirichlet", {
   set.seed(1976)
-  n <- 100000
+  n <- 10000
   p <- c(.4, .3, .2, .1)
   k <- c(10, 20, 30, 40)
   Y <- rGenDirichlet(n, p, k)
@@ -18,7 +29,8 @@ describe("rGenDirichlet", {
   })
   it("Errors are generated on illegal inputs", {
     p <- c(.1, .7, .05, .15)
-    expect_error(rGenDirichlet(Y, p, k))
+    expect_error(rGenDirichlet(-n, p, k))
+    expect_warning(rGenDirichlet(10, c(.5, .5, .5), c(2, 3, 4)))
   })
   it("That rdirichlet and rGenDirichlet are equivalent", {
     Y <- matrix(c(.5, .3, .2), nrow = 1, ncol = 3)
@@ -48,6 +60,7 @@ describe("qGenDirichlet", {
   })
   it("Errors are generated for illegal input", {
     expect_error(rGenDirichlet(-1, p, k))
+    expect_warning(qGenDirichlet(Y, c(0.5, 0.5, 0.5, 0.5), c(2, 3, 4, 5)))
   })
   expect_equal(apply(Z3, 2, mean), apply(W, 2, mean)[c(2,1,3,4)])
 })
@@ -98,7 +111,7 @@ test_that("fit_genDirichlet", {
   expect_equal(temp$p, desired_p, tolerance = 0.1)
 
   expect_error(fit.dirichlet(4))
-  expect_error(fit.dirichlet(matrix(1,2,3,4, nrow = 2), "not there yet"))
+  expect_error(fit.dirichlet(matrix(c(1,2,3,4), nrow = 2), "not there yet"))
 
   desired_p <- c(.5, .3, .2)
   desired_k <- c(5, 6, 7)
@@ -117,33 +130,31 @@ test_that("qApproxMarginalGenDirichlet", {
   expect_error(qApproxMarginalGenDirichlet(.5, c(.6,.4), c(3,4,5)))
   expect_error(qApproxMarginalGenDirichlet(.5, c(.6,.4), c(3,4)))
   expect_error(qApproxMarginalGenDirichlet(.5, c(.2,.3,.5), c(3,4,5)))
+  expect_warning(qApproxMarginalGenDirichlet(c(0.05,0.5,0.95), c(.5,.5,.5,.5), c(3,4,5,6)))
+})
+
+test_that("calculateGenDirichletCV", {
+  expect_equal(1, calculateGenDirichletCV(c(0.5, 0.3, 0.2), c(1, 1, 1))[2])
 })
 
 test_that("calculateConstantCVGenDirichletK", {
-  #expected warning
-  suppressWarnings(
-    k <- calculateConstantCVGenDirichletK(c(.5,.3,.2), 10)
-  )
+  expect_warning(k <- calculateConstantCVGenDirichletK(c(.5,.3,.2), 10))
   expect_true(length(k) == 3)
   expect_true(all(k[1:2] > 0))
   expect_equal(k[1], 10)
 
   a <- c(1, 10, 20, 40, 100, 500)
   p1 <- 1/a / sum(1/a)
-  #expected warning
-  suppressWarnings(
-    k <- calculateConstantCVGenDirichletK(p1, 3)
-  )
+  expect_warning(k <- calculateConstantCVGenDirichletK(p1, 3))
   expect_true(length(k) == 6)
   expect_true(all(k[1:5] > 0))
   expect_equal(k[1], 3)
 
-  #expected warning
-  suppressWarnings(
-    k <- calculateConstantCVGenDirichletK(c(.4,.3,.2,.1), 1)
-  )
+  expect_warning(k <- calculateConstantCVGenDirichletK(c(.4,.3,.2,.1), 1))
   expect_equal(k, c(1, 2.2, .Machine$double.xmax, .Machine$double.xmax))
 
   k <- calculateConstantCVGenDirichletK(c(.3,.2,.15,.10,.05, .05, .05, .05, .05), 20)
   expect_equal(k[c(1,9)], c(20,  32.02777777777888))
+
+  expect_warning(calculateConstantCVGenDirichletK(c(.5,.5,.5), 2))
 })
