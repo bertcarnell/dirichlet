@@ -1,2 +1,0 @@
-export(ddirichlet, rdirichlet, rGenDirichlet,
-  fit.dirichlet, fit.genDirichlet)
