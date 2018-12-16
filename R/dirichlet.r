@@ -85,6 +85,7 @@ rdirichlet <- function(n, alpha, allowZero=FALSE) {
 #' @param alpha The Dirichlet parameters.  \code{alpha > 0}
 #'
 #' @return approximate dirichlet quantiles
+#' @importFrom stats pgamma qgamma rgamma
 #' @export
 #'
 #' @examples
@@ -138,6 +139,7 @@ qdirichlet <- function(X, alpha) {
 #' The \code{fit.dirichlet} function returns two estimates of \code{k}.  One based on the most likely
 #' parameter in the distribution, the other based on a weighted mean of the \code{k} estimates for each parameter.
 #'
+#' @importFrom stats weighted.mean optim var
 #' @name fit_dirichlet
 #' @export
 #'
@@ -197,6 +199,7 @@ fit.dirichlet <- function(X, type="mm")
 #' @param alpha the vector of dirichlet parameters
 #'
 #' @return the vector of marginal quantiles
+#' @importFrom stats qbeta
 #' @export
 #'
 #' @examples

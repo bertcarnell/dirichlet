@@ -26,4 +26,9 @@ Fit Dirichlet parameters
 }
 \examples{
 fit.dirichlet(matrix(c(.1, .9, .2, .8, .3, .7), nrow=3, ncol=2, byrow=TRUE), type="mm")
+Z <- rdirichlet(100, c(4,3,2))
+fit.dirichlet(Z)
+fit.dirichlet(Z, "ml")
+  Z2 <- rGenDirichlet(100, c(0.7, 0.2, 0.1), c(10, 20, 20))
+  fit.genDirichlet(Z2)
 }

@@ -18,5 +18,6 @@ Suggests:
     covr
 RoxygenNote: 6.1.1
 Collate: 
+    'dirichlet-package.R'
     'dirichlet.r'
     'genDirichlet.r'

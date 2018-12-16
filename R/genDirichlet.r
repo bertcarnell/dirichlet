@@ -7,9 +7,12 @@
 #' @param x number of observations. If length(n) > 1, the length is taken to be the number required.
 #' @param p,k The Generalized Dirichlet normalized parameters.  The Dirichlet parameters may contain zeros if the branch to which a parameter is referring is not allowed.  k * p = alpha
 #' @param a,b The Generalized Dirichlet standard parameters
+#' @param n the number of samples
+#' @param X a matrix of quantiles
 #'
 #' @return rGenDirichlet generates random deviates and dGenDirichlet generates densities
 #' @name gendirichlet
+#' @importFrom stats qbeta rbeta
 #' @export
 #'
 #' @examples
@@ -299,6 +302,7 @@ fit.genDirichlet <- function(X, type="mm")
 #' @param k vector of k parameters
 #'
 #' @return blah
+#' @importFrom stats qbeta
 #' @export
 #'
 #' @examples

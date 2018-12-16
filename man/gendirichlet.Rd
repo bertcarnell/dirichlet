@@ -22,6 +22,10 @@ qGenDirichlet(X, p, k)
 \item{p, k}{The Generalized Dirichlet normalized parameters.  The Dirichlet parameters may contain zeros if the branch to which a parameter is referring is not allowed.  k * p = alpha}
 
 \item{a, b}{The Generalized Dirichlet standard parameters}
+
+\item{n}{the number of samples}
+
+\item{X}{a matrix of quantiles}
 }
 \value{
 rGenDirichlet generates random deviates and dGenDirichlet generates densities
