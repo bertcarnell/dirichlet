@@ -2,9 +2,9 @@ context("test-gendirichlet")
 
 test_that("dGenDirichlet", {
   expect_equal(0, dGenDirichlet(c(0.1, 0.1, 0.1), c(0.7, 0.2, 0.1), c(2, 3, 4)))
-  expect_equal(0, dGenDirichlet(c(0.1, 0.1, 0.1), c(1.1, 0.2, 0.1), c(2, 3, 4)))
-  expect_equal(0, dGenDirichlet(c(0.1, 0.1, 0.1), c(0.7, 0.2, -0.1), c(2, 3, 4)))
-  expect_equal(0, dGenDirichlet(c(0.1, 0.1, 0.1), c(0.7, 0.2, 0.1), c(2, -3, 4)))
+  expect_equal(0, dGenDirichlet(c(0.8, 0.1, 0.1), c(1.1, 0.2, 0.1), c(2, 3, 4)))
+  expect_equal(0, dGenDirichlet(c(0.8, 0.1, 0.1), c(0.7, 0.2, -0.1), c(2, 3, 4)))
+  expect_equal(0, dGenDirichlet(c(0.8, 0.1, 0.1), c(0.7, 0.2, 0.1), c(2, -3, 4)))
 })
 
 test_that("dGenDirichletStd", {
