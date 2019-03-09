@@ -19,7 +19,7 @@ describe("rGenDirichlet", {
   Y <- rGenDirichlet(n, p, k)
   it("The returned vector is on (0,1)", {
     expect_true(all(dim(Y) == c(n, length(p))))
-    expect_true(all(Y >= 0 && Y <= 1))
+    expect_true(all(Y >= 0) && all(Y <= 1))
   })
   it("The sum of the values in each draw is one.", {
     expect_equal(rowSums(Y), rep(1, n))
