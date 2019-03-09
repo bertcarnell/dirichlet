@@ -39,9 +39,9 @@ describe("rdirichlet", {
   Y3 <- rdirichlet(n, p, allowZero = TRUE)
   expect_true(all(dim(Y3) == c(n, length(p))))
   it("The returned vector is on (0,1)",{
-    expect_true(all(Y >= 0 && Y <= 1))
-    expect_true(all(Y2 >= 0 && Y2 <= 1))
-    expect_true(all(Y3 >= 0 && Y3 <= 1))
+    expect_true(all(Y >= 0) && all(Y <= 1))
+    expect_true(all(Y2 >= 0) && all(Y2 <= 1))
+    expect_true(all(Y3 >= 0) && all(Y3 <= 1))
   })
   it("The sum of the values in each draw is one.", {
     expect_equal(rowSums(Y), rep(1, n))
