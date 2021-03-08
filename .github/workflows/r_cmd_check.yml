@@ -76,6 +76,7 @@ jobs:
         shell: Rscript {0}
         
       - name: Test Coverage
+        if: matrix.config.os == 'ubuntu-latest' && matrix.config.r == 'release'
         run: covr::codecov()
         shell: Rscript {0}
 
