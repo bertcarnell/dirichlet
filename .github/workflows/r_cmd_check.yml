@@ -1,10 +1,13 @@
 name: R-CMD-CHECK
 
+# run on push, pull_request, and schedule 15 min, 2 hour, 6th day, any month, any day of the week
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  schedule:
+    - cron: "15 2 6 * *"
 
 jobs:
   R-CMD-check:
